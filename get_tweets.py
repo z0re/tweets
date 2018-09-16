@@ -23,7 +23,7 @@ def mkdir(path):
         os.makedirs(path)
 
 #method to get a user's last 100 tweets
-def get_tweets(username, max_id = ""):
+def get_tweets(username, max_id = '1040919820752101376'):
     mkdir(username)
     #http://tweepy.readthedocs.org/en/v3.1.0/getting_started.html#api
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
@@ -36,7 +36,7 @@ def get_tweets(username, max_id = ""):
 
     #get tweets
     tweets = api.user_timeline(screen_name = username,count = number_of_tweets, max_id=max_id)
-
+    print('max_id: ', max_id, len(tweets))
 
     #write to a new csv file from the array of tweets
     last_id = ""
