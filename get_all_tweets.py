@@ -20,6 +20,10 @@ if __name__ == '__main__':
     if len(sys.argv) == 2:
         alias = sys.argv[1]
         max_id = '9040919820752101376'
+        local_max_id = get_tweets.read_last_id(sys.argv[1])
+        if len(local_max_id) > 0:
+            max_id = local_max_id
+            print ("Using local max_id: " + local_max_id)
         while True:
             max_id = get_tweets.get_tweets(sys.argv[1], max_id=max_id)
             print ("New max_id: " + max_id)

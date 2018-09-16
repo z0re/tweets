@@ -6,5 +6,5 @@ access_token_secret = "RFwCqYoZ1W1epTbaNoscGjnJP6uf1Q0wPyt5gMDEVI"
 delimiter = '\t'
 delete = True
 delete_max_id = '947681298188984324'
-delete_max_count = 1024
+delete_max_count = 1024*3
 

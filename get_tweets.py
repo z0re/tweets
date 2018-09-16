@@ -11,6 +11,7 @@ import config
 #http://www.tweepy.org/
 import tweepy
 
+deleted_tweets_count = 0
 consumer_key = config.consumer_key
 consumer_secret = config.consumer_secret
 csv_ext = '.csv'
@@ -21,8 +22,13 @@ def mkdir(path):
     if not os.path.exists(path):
         print "create directory: " + path 
         os.makedirs(path)
-deleted_tweets_count = 0
 
+def read_last_id(username):
+    mipath = os.path.join(username, "max_id.txt")
+    with open(mipath, 'r') as ofile:
+        return ofile.read(id_str)
+    return ""
+ 
 def write_last_id(username, id_str):
     mipath = os.path.join(username, "max_id.txt")
     with open(mipath, 'w+') as ofile:
