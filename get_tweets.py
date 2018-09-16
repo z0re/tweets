@@ -5,7 +5,7 @@ import csv
 import json
 import os
 import sys
-
+import urllib
 import config
 
 #http://www.tweepy.org/
@@ -23,7 +23,7 @@ def mkdir(path):
         os.makedirs(path)
 
 #method to get a user's last 100 tweets
-def get_tweets(username):
+def get_tweets(username, max_id = ""):
     mkdir(username)
     #http://tweepy.readthedocs.org/en/v3.1.0/getting_started.html#api
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
@@ -35,24 +35,40 @@ def get_tweets(username):
     number_of_tweets = 100
 
     #get tweets
-    tweets = api.user_timeline(screen_name = username,count = number_of_tweets)
+    tweets = api.user_timeline(screen_name = username,count = number_of_tweets, max_id=max_id)
 
 
     #write to a new csv file from the array of tweets
+    last_id = ""
     for tweet in tweets :
         tdir = os.path.join(username, str(tweet.created_at).split(' ')[0])
         print tweet.created_at
         mkdir(tdir)
+        last_id = tweet.id_str
+        writes = 0
         with open(os.path.join(tdir, "{0}.json".format(tweet.id_str)), 'w+') as ofile:
             ofile.write(json.dumps(tweet._json))
             ofile.close()
-
+            writes += 1
 
         with open(tdir + csv_ext, 'a') as csvfile:
-            tweet_for_csv = [tweet.id_str, tweet.created_at, tweet.text.encode("utf-8")]
+            tweet_for_csv = [tweet.user.screen_name, tweet.id_str, tweet.created_at, tweet.text.encode("utf-8")]
             writer = csv.writer(csvfile, delimiter=config.delimiter)
             writer.writerows([tweet_for_csv])
             csvfile.close()
+            writes += 1
+
+        with open(tdir + "_urlencode" +  csv_ext, 'a') as csvfile:
+            tweet_for_csv = [tweet.user.screen_name, tweet.id_str, tweet.created_at, urllib.quote_plus(tweet.text.encode("utf-8"))]
+            writer = csv.writer(csvfile, delimiter=config.delimiter)
+            writer.writerows([tweet_for_csv])
+            csvfile.close()
+            writes += 1
+
+        if writes == 3 and config.delete:
+            # TODO: delete
+            print ("Delete tweet: " + tweet.id_str)
+    return last_id
 
 #if we're running this as a script
 if __name__ == '__main__':
