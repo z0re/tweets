@@ -21,7 +21,13 @@ def mkdir(path):
     if not os.path.exists(path):
         print "create directory: " + path 
         os.makedirs(path)
+deleted_tweets_count = 0
 
+def write_last_id(username, id_str):
+    mipath = os.path.join(username, "max_id.txt")
+    with open(mipath, 'w+') as ofile:
+        ofile.write(id_str)
+     
 #method to get a user's last 100 tweets
 def get_tweets(username, max_id = '1040919820752101376'):
     mkdir(username)
@@ -66,8 +72,15 @@ def get_tweets(username, max_id = '1040919820752101376'):
             writes += 1
 
         if writes == 3 and config.delete:
-            # TODO: delete
-            print ("Delete tweet: " + tweet.id_str)
+            if long(tweet.id_str) <  long(config.delete_max_id):
+                print ("Delete tweet: " + tweet.id_str)
+                api.destroy_status(tweet.id_str)
+                deleted_tweets_count += 1
+                if deleted_tweets_count >= config.delete_max_number:
+                    write_last_id(username, tweet.id_str)
+                    print ("Delete tweet: reached to the deletion count %d, exit.".format(config.delete_max_number))
+                    exit(1)
+    write_last_id(username, last_id)
     return last_id
 
 #if we're running this as a script
