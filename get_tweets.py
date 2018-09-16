@@ -11,7 +11,6 @@ import config
 #http://www.tweepy.org/
 import tweepy
 
-deleted_tweets_count = 0
 consumer_key = config.consumer_key
 consumer_secret = config.consumer_secret
 csv_ext = '.csv'
@@ -26,7 +25,7 @@ def mkdir(path):
 def read_last_id(username):
     mipath = os.path.join(username, "max_id.txt")
     with open(mipath, 'r') as ofile:
-        return ofile.read(id_str)
+        return ofile.read()
     return ""
  
 def write_last_id(username, id_str):
@@ -81,10 +80,10 @@ def get_tweets(username, max_id = '1040919820752101376'):
             if long(tweet.id_str) <  long(config.delete_max_id):
                 print ("Delete tweet: " + tweet.id_str)
                 api.destroy_status(tweet.id_str)
-                deleted_tweets_count += 1
-                if deleted_tweets_count >= config.delete_max_number:
+                config.delete_max_count -= 1
+                if 0 >= config.delete_max_count:
                     write_last_id(username, tweet.id_str)
-                    print ("Delete tweet: reached to the deletion count %d, exit.".format(config.delete_max_number))
+                    print ("Delete tweet: reached to the maximum deletion count, exit.")
                     exit(1)
     write_last_id(username, last_id)
     return last_id
