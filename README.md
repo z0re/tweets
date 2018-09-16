@@ -25,5 +25,11 @@ $ python
 >>> get_tweets("[twitter_username]")
 ```
 
+## TODO
+* Download images and video
+* Export liked tweets
+* Export lists
+* Export to Excel
+
 ## More
 http://www.getlaura.com/how-to-download-tweets-from-the-twitter-api/
