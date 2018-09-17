@@ -9,7 +9,7 @@ Use this script to download the last 100 (or whatever number you choose) from an
 $ git clone https://github.com/liruqi/get_tweets.git
 $ cd get_tweets
 ```
-Then you need to get your Twitter API Credentials by creating a new app at apps.twitter.com. Enter the appropriate API keys in lines 11-15 of get_tweets.py.
+You may need to get your Twitter API Credentials by creating a new app at apps.twitter.com. Enter the appropriate API keys in config.py.
 
 Then you can run the script by entering one username at the command line:
 
