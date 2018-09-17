@@ -8,11 +8,6 @@ import sys
 import urllib
 import get_tweets
 
-def mkdir(path):
-    if not os.path.exists(path):
-        print "create directory: " + path 
-        os.makedirs(path)
-
 #if we're running this as a script
 if __name__ == '__main__':
 
@@ -30,6 +25,17 @@ if __name__ == '__main__':
             if len(max_id) <= 0:
                 break
             max_id = str(long(max_id) - 1)
+    elif len(sys.argv) == 3:
+        alias = sys.argv[1]
+        action = sys.argv[2]
+        if action == 'migrate_index':
+            for fname in os.listdir(alias):
+                if fname[-4:] == ".tsv":
+                    tdir = os.path.join(alias, fname[:10])
+                    src = os.path.join(alias, fname)
+                    dst = os.path.join(tdir, "index"+fname[10:])
+                    print (src, '->', dst)
+                    os.rename(src,dst)
     else:
         print "Error: enter one username"
 

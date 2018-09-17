@@ -62,14 +62,14 @@ def get_tweets(username, max_id = '1040919820752101376'):
             ofile.close()
             writes += 1
 
-        with open(tdir + csv_ext, 'a') as csvfile:
+        with open(os.path.join(tdir, "index" + csv_ext), 'a') as csvfile:
             tweet_for_csv = [tweet.user.screen_name, tweet.id_str, tweet.created_at, tweet.text.encode("utf-8")]
             writer = csv.writer(csvfile, delimiter=config.delimiter)
             writer.writerows([tweet_for_csv])
             csvfile.close()
             writes += 1
 
-        with open(tdir + "_urlencode" +  csv_ext, 'a') as csvfile:
+        with open(os.path.join(tdir, "index_urlencode" + csv_ext), 'a') as csvfile:
             tweet_for_csv = [tweet.user.screen_name, tweet.id_str, tweet.created_at, urllib.quote_plus(tweet.text.encode("utf-8"))]
             writer = csv.writer(csvfile, delimiter=config.delimiter)
             writer.writerows([tweet_for_csv])
@@ -83,7 +83,7 @@ def get_tweets(username, max_id = '1040919820752101376'):
                 config.delete_max_count -= 1
                 if 0 >= config.delete_max_count:
                     write_last_id(username, tweet.id_str)
-                    print ("Delete tweet: reached to the maximum deletion count, exit.")
+                    print ("Delete tweet: reached the maximum deletion count, exit.")
                     exit(1)
     write_last_id(username, last_id)
     return last_id
